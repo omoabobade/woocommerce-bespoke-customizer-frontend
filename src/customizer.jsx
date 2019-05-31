@@ -11,7 +11,7 @@ class Customizer extends React.Component {
         this.fetchItems();
     }
 
-    //activeDomain = "http://localhost/wordpress/";
+    //activeDomain = "http://localhost:8080/wordpress/";
     activeDomain = "https://www.marcomartinez.clothing/demo/";
 
     componentDidMount(){
@@ -19,7 +19,8 @@ class Customizer extends React.Component {
     }
 
     fetchItems(){
-        fetch(this.activeDomain+"?api_request=fetchItems", {method: 'get'}).then(
+        const prodId = this.getCookie('customize_product_id');
+        fetch(this.activeDomain+"?api_request=fetchItems&prodId="+prodId, {method: 'get'}).then(
             function(response){
                 return response.json();
             }
@@ -27,6 +28,22 @@ class Customizer extends React.Component {
             this.setState({items});
         })
     }
+    
+    getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
     
     fetchCategories = itemId => e=>{
 
@@ -127,7 +144,7 @@ class Customizer extends React.Component {
 
     render(){
         return (
-            <div id="exampleModalLong" className="modal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style={{ paddingLeft: "0px;"}}>
+            <div id="exampleModalLong" className="modal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style={{ paddingLeft: "0px"}}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
